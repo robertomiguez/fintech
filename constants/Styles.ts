@@ -6,6 +6,7 @@ export const defaultStyles = StyleSheet.create({
     flex: 1,
     backgroundColor: Colors.background,
     padding: 16,
+    alignItems: 'center',
   },
   header: {
     fontSize: 40,

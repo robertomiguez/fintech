@@ -10,7 +10,12 @@ import {
 } from 'react-native-gesture-handler';
 
 const Page = () => {
-  const [assets] = useAssets([require('@/assets/videos/intro.mp4')]);
+  const [assets, error] = useAssets([require('@/assets/videos/intro.mp4')]);
+
+  if (error) {
+    console.error('Error loading assets: ', error);
+  }
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={styles.container}>
@@ -22,6 +27,9 @@ const Page = () => {
             source={{ uri: assets[0].uri }}
             style={styles.video}
             resizeMode={ResizeMode.COVER}
+            onError={(e) => console.error('Video Error: ', e)}
+            onLoad={() => console.log('Video Loaded')}
+            onLoadStart={() => console.log('Video Loading Started')}
           />
         )}
         <View style={styles.textContainer}>
@@ -43,7 +51,7 @@ const Page = () => {
             </TouchableOpacity>
           </Link>
           <Link
-            href={'/sign up'}
+            href={'/signup'}
             style={[
               defaultStyles.pillButton,
               { flex: 1, backgroundColor: 'white' },
