@@ -33,7 +33,7 @@ const Page = () => {
           />
         )}
         <View style={styles.textContainer}>
-          <Text style={styles.header}> Ready to change the way you money?</Text>
+          <Text style={styles.header}>Ready to change the way you money?</Text>
         </View>
         <View style={styles.buttons}>
           <Link
@@ -80,15 +80,17 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     position: 'absolute',
-    top: 110,
+    top: 90,
     left: 30,
     right: 30,
+    alignItems: 'center',
   },
   header: {
-    fontSize: 36,
+    fontSize: 32,
     fontWeight: '900',
     textTransform: 'uppercase',
-    color: 'white',
+    color: 'black',
+    textAlign: 'center',
   },
   buttons: {
     position: 'absolute',

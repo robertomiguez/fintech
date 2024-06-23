@@ -12,6 +12,13 @@ export const defaultStyles = StyleSheet.create({
     fontSize: 40,
     fontWeight: '700',
   },
+  pillButtonSmall: {
+    paddingHorizontal: 20,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   pillButton: {
     padding: 10,
     height: 50,
@@ -34,13 +41,6 @@ export const defaultStyles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: '500',
-  },
-  pillButtonSmall: {
-    paddingHorizontal: 20,
-    height: 40,
-    borderRadius: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   buttonTextSmall: {
     color: '#fff',
