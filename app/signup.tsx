@@ -1,16 +1,42 @@
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
-import { Link } from 'expo-router';
+import { isClerkAPIResponseError, useSignUp } from '@clerk/clerk-expo';
+import { Link, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import {
   GestureHandlerRootView,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
+
 const Page = () => {
   const [countryCode, setCountryCode] = useState('+44');
-  const [mobileNumber, setMobileNumber] = useState('');
-  const onSignUp = async () => {};
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const router = useRouter();
+  const { signUp } = useSignUp();
+  const onSignUp = async () => {
+    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+    try {
+      console.log(fullPhoneNumber);
+      await signUp!.create({
+        phoneNumber: fullPhoneNumber,
+      });
+      console.log('passouuuu');
+
+      signUp!.preparePhoneNumberVerification();
+      router.push({
+        pathname: '/verify/[phone]',
+        params: { phone: fullPhoneNumber },
+      });
+    } catch (error) {
+      console.error(error, JSON.stringify(error, null, 2));
+      if (isClerkAPIResponseError(error)) {
+        if (error.errors[0].code === 'form_identifier_not_found') {
+          console.warn('error', error.errors[0].message);
+        }
+      }
+    }
+  };
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -29,11 +55,11 @@ const Page = () => {
           ></TextInput>
           <TextInput
             style={[styles.input, { flex: 1 }]}
-            placeholder="Mobile number"
+            placeholder="Phone number"
             placeholderTextColor={Colors.gray}
             keyboardType="numeric"
-            value={mobileNumber}
-            onChangeText={(text) => setMobileNumber(text)}
+            value={phoneNumber}
+            onChangeText={(text) => setPhoneNumber(text)}
           ></TextInput>
         </View>
         <Link href={'/login'} replace asChild>
@@ -47,7 +73,7 @@ const Page = () => {
         <TouchableOpacity
           style={[
             defaultStyles.pillButton,
-            mobileNumber !== '' ? styles.enabled : styles.disabled,
+            phoneNumber !== '' ? styles.enabled : styles.disabled,
             {
               marginBottom: 20,
             },

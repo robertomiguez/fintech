@@ -1,7 +1,9 @@
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { SignIn } from '@/types/SignIn';
+import { isClerkAPIResponseError, useSignIn } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import {
@@ -9,15 +11,45 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 
-
-
 const Page = () => {
   const [countryCode, setCountryCode] = useState('+44');
-  const [mobileNumber, setMobileNumber] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const router = useRouter();
+  const { signIn } = useSignIn();
   const onSignIn = async (type: SignIn) => {
+    if (type === SignIn.Phone) {
+      try {
+        const fullPhoneNumber = `${countryCode}${phoneNumber}`;
+        const { supportedFirstFactors } = await signIn!.create({
+          identifier: fullPhoneNumber,
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const firstPhoneFactor: any = supportedFirstFactors.find(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (factor: any) => {
+            return factor.strategy === 'phone_code';
+          }
+        );
+        const { phoneNumberId } = firstPhoneFactor;
+        await signIn!.prepareFirstFactor({
+          strategy: 'phone_code',
+          phoneNumberId,
+        });
+        router.push({
+          pathname: '/verify/[phone]',
+          params: { phone: fullPhoneNumber, signin: 'true' },
+        });
+      } catch (error) {
+        console.error(error, JSON.stringify(error, null, 2));
+        if (isClerkAPIResponseError(error)) {
+          if (error.errors[0].code === 'form_identifier_not_found') {
+            console.warn('error', error.errors[0].message);
+          }
+        }
+      }
       console.warn(`logged by ${SignIn[type]}`);
+    }
   };
-
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <View style={defaultStyles.container}>
@@ -35,24 +67,24 @@ const Page = () => {
           ></TextInput>
           <TextInput
             style={[styles.input, { flex: 1 }]}
-            placeholder="Mobile number"
+            placeholder="Phone number"
             placeholderTextColor={Colors.gray}
             keyboardType="numeric"
-            value={mobileNumber}
-            onChangeText={(text) => setMobileNumber(text)}
+            value={phoneNumber}
+            onChangeText={(text) => setPhoneNumber(text)}
           ></TextInput>
         </View>
 
         <TouchableOpacity
           style={[
             defaultStyles.pillButton,
-            mobileNumber !== '' ? styles.enabled : styles.disabled,
+            phoneNumber !== '' ? styles.enabled : styles.disabled,
             {
               marginBottom: 20,
               width: 250,
             },
           ]}
-          onPress={() => onSignIn(SignIn.Mobile)}
+          onPress={() => onSignIn(SignIn.Phone)}
         >
           <Text style={defaultStyles.buttonText}>Continue</Text>
         </TouchableOpacity>
@@ -86,7 +118,7 @@ const Page = () => {
               marginTop: 20,
               backgroundColor: '#fff',
               width: 250,
-              paddingLeft: 13
+              paddingLeft: 13,
             },
           ]}
         >
@@ -107,7 +139,7 @@ const Page = () => {
               marginTop: 20,
               backgroundColor: '#fff',
               width: 250,
-              paddingLeft: 13
+              paddingLeft: 13,
             },
           ]}
         >
@@ -116,12 +148,10 @@ const Page = () => {
             Continue with Google
           </Text>
         </TouchableOpacity>
-
       </View>
     </GestureHandlerRootView>
   );
 };
-
 export default Page;
 
 const styles = StyleSheet.create({

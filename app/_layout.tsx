@@ -1,4 +1,5 @@
 import Colors from '@/constants/Colors';
+import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
@@ -10,6 +11,28 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
+import * as SecureStore from 'expo-secure-store';
+
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (error) {
+      console.warn(error);
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (error) {
+      console.warn(error);
+      return;
+    }
+  },
+};
+
+const CLERK_PUBLISHABLE_KEY = process.env.CLERK_PUBLISHABLE_KEY;
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -25,6 +48,7 @@ const InitialLayout = () => {
     ...FontAwesome.font,
   });
   const router = useRouter();
+  const { isLoaded, isSignedIn } = useAuth();
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -36,6 +60,11 @@ const InitialLayout = () => {
       SplashScreen.hideAsync();
     }
   }, [loaded]);
+
+  useEffect(() => {
+    console.log('isLoaded', isLoaded);
+    console.log('isSignedIn', isSignedIn);
+  }, [isLoaded, isSignedIn]);
 
   if (!loaded) {
     return null;
@@ -88,6 +117,20 @@ const InitialLayout = () => {
           name="help"
           options={{ title: 'Help', presentation: 'fullScreenModal' }}
         />
+        <Stack.Screen
+          name="verify/[phone]"
+          options={{
+            title: '',
+            headerBackTitle: '',
+            headerShadowVisible: false,
+            headerStyle: { backgroundColor: Colors.background },
+            headerLeft: () => (
+              <TouchableOpacity onPress={router.back}>
+                <Ionicons name="arrow-back" size={30} color={Colors.dark} />
+              </TouchableOpacity>
+            ),
+          }}
+        />
       </Stack>
     </GestureHandlerRootView>
   );
@@ -95,9 +138,14 @@ const InitialLayout = () => {
 
 const RootLayoutNav = () => {
   return (
-    <>
-      <InitialLayout />
-    </>
+    <ClerkProvider
+      publishableKey={CLERK_PUBLISHABLE_KEY!}
+      tokenCache={tokenCache}
+    >
+      <ClerkLoaded>
+        <InitialLayout />
+      </ClerkLoaded>
+    </ClerkProvider>
   );
 };
 
