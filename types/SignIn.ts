@@ -1,5 +1,5 @@
 export enum SignIn {
-  Mobile,
+  Phone,
   Email,
   Google,
 }
