@@ -3,7 +3,7 @@ import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
-import { Link, Stack, useRouter } from 'expo-router';
+import { Link, Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import {
@@ -12,6 +12,7 @@ import {
 } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
+import { Text } from 'react-native';
 
 const tokenCache = {
   async getToken(key: string) {
@@ -49,6 +50,7 @@ const InitialLayout = () => {
   });
   const router = useRouter();
   const { isLoaded, isSignedIn } = useAuth();
+  const segments = useSegments();
 
   // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
@@ -64,10 +66,20 @@ const InitialLayout = () => {
   useEffect(() => {
     console.log('isLoaded', isLoaded);
     console.log('isSignedIn', isSignedIn);
+    if (!isLoaded) return;
+
+    const inAuthGroup = segments[0] === '(authenticated)';
+
+    if (isSignedIn && !inAuthGroup) {
+      router.replace('/(authenticated)/(tabs)/home');
+    } else if (!isSignedIn) {
+      router.replace('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, isSignedIn]);
 
-  if (!loaded) {
-    return null;
+  if (!loaded || !isLoaded) {
+    return <Text>Loading</Text>;
   }
 
   return (
@@ -130,6 +142,10 @@ const InitialLayout = () => {
               </TouchableOpacity>
             ),
           }}
+        />
+        <Stack.Screen
+          name="(authenticated)/(tabs)"
+          options={{ headerShown: false }}
         />
       </Stack>
     </GestureHandlerRootView>
