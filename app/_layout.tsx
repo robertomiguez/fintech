@@ -1,5 +1,5 @@
 import Colors from '@/constants/Colors';
-import { ClerkLoaded, ClerkProvider, useAuth } from '@clerk/clerk-expo';
+import { ClerkProvider, useAuth } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useFonts } from 'expo-font';
@@ -158,9 +158,7 @@ const RootLayoutNav = () => {
       publishableKey={CLERK_PUBLISHABLE_KEY!}
       tokenCache={tokenCache}
     >
-      <ClerkLoaded>
-        <InitialLayout />
-      </ClerkLoaded>
+      <InitialLayout />
     </ClerkProvider>
   );
 };
