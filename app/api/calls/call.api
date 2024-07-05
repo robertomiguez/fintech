@@ -1,0 +1,15 @@
+// listings
+
+GET https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=5&convert=GBP
+X-CMC_PRO_API_KEY: 9be706ca-d9d8-4cf6-b32d-566390ee11c9
+
+GET http://localhost:8081/api/listings
+
+// info
+
+https://pro-api.coinmarketcap.com/v2/cryptocurrency/info?id=1,2
+X-CMC_PRO_API_KEY: 9be706ca-d9d8-4cf6-b32d-566390ee11c9
+
+GET http://localhost:8081/api/info?id=1
+
+GET http://localhost:8081/api/info?id=1,2

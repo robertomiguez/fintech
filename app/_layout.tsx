@@ -13,6 +13,9 @@ import {
 import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
 import { Text } from 'react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const queryClient = new QueryClient();
 
 const tokenCache = {
   async getToken(key: string) {
@@ -158,7 +161,9 @@ const RootLayoutNav = () => {
       publishableKey={CLERK_PUBLISHABLE_KEY!}
       tokenCache={tokenCache}
     >
-      <InitialLayout />
+      <QueryClientProvider client={queryClient}>
+        <InitialLayout />
+      </QueryClientProvider>
     </ClerkProvider>
   );
 };
