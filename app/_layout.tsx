@@ -12,7 +12,7 @@ import {
 } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -148,6 +148,33 @@ const InitialLayout = () => {
         <Stack.Screen
           name="(authenticated)/(tabs)"
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(authenticated)/crypto/[id]"
+          options={{
+            title: '',
+            headerLeft: () => (
+              <TouchableOpacity onPress={router.back}>
+                <Ionicons name="arrow-back" size={30} color={Colors.dark} />
+              </TouchableOpacity>
+            ),
+            headerLargeTitle: true,
+            headerTransparent: true,
+            headerRight: () => (
+              <View style={{ flexDirection: 'row', gap: 10 }}>
+                <TouchableOpacity onPress={router.back}>
+                  <Ionicons
+                    name="notifications-outline"
+                    size={30}
+                    color={Colors.dark}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={router.back}>
+                  <Ionicons name="star-outline" size={30} color={Colors.dark} />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
         />
       </Stack>
     </GestureHandlerRootView>
