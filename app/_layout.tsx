@@ -12,7 +12,7 @@ import {
 } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient();
@@ -20,18 +20,18 @@ const queryClient = new QueryClient();
 const tokenCache = {
   async getToken(key: string) {
     try {
-      return SecureStore.getItemAsync(key);
+      return await SecureStore.getItemAsync(key);
     } catch (error) {
-      console.warn(error);
+      console.warn('Error getting token:', error);
+      await SecureStore.deleteItemAsync(key);
       return null;
     }
   },
   async saveToken(key: string, value: string) {
     try {
-      return SecureStore.setItemAsync(key, value);
+      return await SecureStore.setItemAsync(key, value);
     } catch (error) {
-      console.warn(error);
-      return;
+      console.warn('Error saving token:', error);
     }
   },
 };
@@ -55,7 +55,6 @@ const InitialLayout = () => {
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -75,14 +74,14 @@ const InitialLayout = () => {
 
     if (isSignedIn && !inAuthGroup) {
       router.replace('/(authenticated)/(tabs)/home');
-    } else if (!isSignedIn) {
+    } else if (!isSignedIn && !inAuthGroup) {
       router.replace('/');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, isSignedIn]);
 
   if (!loaded || !isLoaded) {
-    return <Text>Loading</Text>;
+    return <Text>Loading...</Text>;
   }
 
   return (
@@ -149,6 +148,33 @@ const InitialLayout = () => {
         <Stack.Screen
           name="(authenticated)/(tabs)"
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="(authenticated)/crypto/[id]"
+          options={{
+            title: '',
+            headerLeft: () => (
+              <TouchableOpacity onPress={router.back}>
+                <Ionicons name="arrow-back" size={30} color={Colors.dark} />
+              </TouchableOpacity>
+            ),
+            headerLargeTitle: true,
+            headerTransparent: true,
+            headerRight: () => (
+              <View style={{ flexDirection: 'row', gap: 10 }}>
+                <TouchableOpacity onPress={router.back}>
+                  <Ionicons
+                    name="notifications-outline"
+                    size={30}
+                    color={Colors.dark}
+                  />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={router.back}>
+                  <Ionicons name="star-outline" size={30} color={Colors.dark} />
+                </TouchableOpacity>
+              </View>
+            ),
+          }}
         />
       </Stack>
     </GestureHandlerRootView>

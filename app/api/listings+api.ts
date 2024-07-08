@@ -4,8 +4,7 @@ import { ExpoRequest, ExpoResponse } from 'expo-router/server';
 const API_KEY = process.env.CRYPTO_API_KEY;
 
 export async function GET(request: ExpoRequest) {
-  // Default limit value
-  const limit = request?.expoUrl?.searchParams?.get('limit') || 5;
+  const limit = request?.expoUrl?.searchParams?.get('limit') || 15;
 
   if (!API_KEY) {
     console.error('API_KEY is not set');
