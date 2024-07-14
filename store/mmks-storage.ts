@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import type { StateStorage } from 'zustand/middleware';
 import { MMKV } from 'react-native-mmkv';
 
