@@ -7,34 +7,60 @@ import {
   Image,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import Colors from '@/constants/Colors';
 import { defaultStyles } from '@/constants/Styles';
 import { useQuery } from '@tanstack/react-query';
 import { Ionicons } from '@expo/vector-icons';
+
+import { Ticker, Coin } from '@/types/crypto';
+import Chart from '@/components/Chart';
 import { useState } from 'react';
+import ErrorMessage from '@/components/ErrorMessage';
+import Loading from '@/components/Loading';
+import { useCoinStore } from '@/store/coinStore';
+import { format } from 'date-fns';
+import CurrencyChangeIndicator from '@/components/CurrencyChangeIndicator';
+
+const fetchTickers = async (id: string): Promise<Ticker[]> => {
+  const response = await fetch(`/api/tickers?coin=${id}`);
+
+  if (!response.ok) throw new Error('Failed to fetch tickers');
+
+  const tickers = await response.json();
+
+  return tickers;
+};
 
 const Page = () => {
   const categories = ['Overview', 'News', 'Orders', 'Transactions'];
   const { id } = useLocalSearchParams();
   const headerHeight = useHeaderHeight();
   const [activeIndex, setActiveIndex] = useState(0);
-  const { data } = useQuery({
-    queryKey: ['info', id],
-    queryFn: async () => {
-      if (!id || Array.isArray(id)) {
-        throw new Error('Invalid ID');
-      }
-      const res = await fetch(`/api/info?id=${id}`);
-      const info = await res.json();
-      return info[+id];
-    },
+
+  const {
+    data: tickers,
+    isLoading: isTickersLoading,
+    error: tickersError,
+  } = useQuery({
+    queryKey: ['tickers'],
+    queryFn: async () => await fetchTickers(id as string),
   });
+
+  const formattedTickers = tickers
+    ? tickers.map((ticker: Ticker) => ({
+        timestamp: ticker.timestamp?.toString(),
+        price: ticker.price ?? 0,
+      }))
+    : [];
+
+  const coin: Coin = useCoinStore((state) => state.coin) as Coin;
 
   return (
     <>
-      <Stack.Screen options={{ title: data?.name }} />
+      <Stack.Screen options={{ title: coin?.name }} />
       <SectionList
         style={{ marginTop: headerHeight }}
         keyExtractor={(i) => i.title}
@@ -89,9 +115,9 @@ const Page = () => {
                 marginHorizontal: 16,
               }}
             >
-              <Text style={styles.subtitle}>{data?.symbol}</Text>
+              <Text style={styles.subtitle}>{coin?.symbol}</Text>
               <Image
-                source={{ uri: data?.logo || 'asset:/images/40.png' }}
+                source={{ uri: coin?.image || 'asset:/images/40.png' }}
                 style={{ width: 40, height: 40 }}
               />
             </View>
@@ -134,12 +160,64 @@ const Page = () => {
         )}
         renderItem={({ item }) => (
           <>
-            <View style={{ height: 500, backgroundColor: 'green' }}>
-              <Text>{item.title}</Text>
-            </View>
+            <Loading show={isTickersLoading} />
+            <ErrorMessage show={tickersError} />
+            {!isTickersLoading && !tickersError && (
+              <>
+                <ErrorMessage
+                  show={formattedTickers?.length === 0}
+                  message="No data available"
+                />
+                {formattedTickers && formattedTickers.length > 0 && (
+                  <Chart tickers={formattedTickers} />
+                )}
+              </>
+            )}
             <View style={[defaultStyles.block, { marginTop: 20 }]}>
               <Text style={styles.subtitle}>Overview</Text>
-              <Text style={{ color: Colors.gray }}>{data?.description}</Text>
+              <View style={styles.overviewRow}>
+                <Text style={styles.overviewLabel}>Price change % 24h</Text>
+                <Text style={styles.overviewValue}>
+                  <CurrencyChangeIndicator
+                    percentChange={coin.price_change_percentage_24h}
+                  />
+                </Text>
+              </View>
+              <View style={styles.overviewRow}>
+                <Text style={styles.overviewLabel}>All-time high price</Text>
+                <Text style={styles.overviewValue}>
+                  {coin.ath
+                    ? new Intl.NumberFormat('de-DE', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      }).format(coin.ath)
+                    : 'N/A'}
+                </Text>
+              </View>
+              <View style={styles.overviewRow}>
+                <Text style={styles.overviewLabel}>All-time high change %</Text>
+                <Text style={styles.overviewValue}>
+                  <CurrencyChangeIndicator
+                    percentChange={coin.ath_change_percentage}
+                  />
+                </Text>
+              </View>
+              <View style={styles.overviewRow}>
+                <Text style={styles.overviewLabel}>All-time high Date</Text>
+                <Text style={styles.overviewValue}>
+                  {coin.ath_date
+                    ? format(new Date(coin.ath_date), 'dd/MM/yyyy')
+                    : 'N/A'}
+                </Text>
+              </View>
+              <View style={styles.overviewRow}>
+                <Text style={styles.overviewLabel}>Max supply</Text>
+                <Text style={styles.overviewValue}>
+                  {coin.max_supply
+                    ? new Intl.NumberFormat('de-DE').format(coin.max_supply)
+                    : 'N/A'}
+                </Text>
+              </View>
             </View>
           </>
         )}
@@ -179,5 +257,20 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#fff',
     borderRadius: 20,
+  },
+  overviewRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  overviewLabel: {
+    fontSize: 14,
+    color: Colors.gray,
+  },
+  overviewValue: {
+    fontSize: 14,
+    fontWeight: 'regular',
+    color: Colors.dark,
   },
 });

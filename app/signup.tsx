@@ -21,7 +21,6 @@ const Page = () => {
       await signUp!.create({
         phoneNumber: fullPhoneNumber,
       });
-      console.log('passouuuu');
 
       signUp!.preparePhoneNumberVerification();
       router.push({

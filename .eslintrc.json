@@ -20,7 +20,7 @@
     "sourceType": "module",
     "requireConfigFile": false
   },
-  "plugins": ["react", "prettier"],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
     "react/react-in-jsx-scope": "off",
     "prettier/prettier": [
@@ -28,7 +28,9 @@
       {
         "endOfLine": "auto"
       }
-    ]
+    ],
+    // TODO: Remove this rule when you have time to fix this issue
+    "@typescript-eslint/no-unused-vars": "off"
   },
   "settings": {
     "react": {

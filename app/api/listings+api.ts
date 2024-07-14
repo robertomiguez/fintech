@@ -1,42 +1,42 @@
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { Coin } from '@/types/crypto';
 import { ExpoRequest, ExpoResponse } from 'expo-router/server';
+import { parse } from 'url';
 
-const API_KEY = process.env.CRYPTO_API_KEY;
-
-export async function GET(request: ExpoRequest) {
-  const limit = request?.expoUrl?.searchParams?.get('limit') || 15;
-
-  if (!API_KEY) {
-    console.error('API_KEY is not set');
-    return ExpoResponse.json({ error: 'API_KEY is not set' });
-  }
+export async function GET(request: { url: string }) {
+  const parsedUrl = parse(request.url, true);
+  const limit = parsedUrl.query.limit || 15;
+  const url = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd`;
 
   try {
-    const url = `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?start=1&limit=${limit}&convert=GBP`;
-
-    const response = await fetch(url, {
-      headers: {
-        'X-CMC_PRO_API_KEY': API_KEY,
-      },
-    });
+    const response = await fetch(url);
 
     if (!response.ok) {
-      console.error(`Error: ${response.status} ${response.statusText}`);
+      console.error(
+        `Response Listings Error: ${response.status} ${response.statusText}`
+      );
       return ExpoResponse.json({
         error: `Failed to fetch data: ${response.status} ${response.statusText}`,
       });
     }
 
     const res = await response.json();
+    const listCoins = res.slice(0, limit).map((coin: Coin) => {
+      return {
+        id: coin.id,
+        symbol: coin.symbol,
+        name: coin.name,
+        image: coin.image,
+        current_price: coin.current_price,
+        price_change_percentage_24h: coin.price_change_percentage_24h,
+        description: null,
+        ath: coin.ath,
+        ath_date: coin.ath_date,
+        ath_change_percentage: coin.ath_change_percentage,
+        max_supply: coin.max_supply,
+      };
+    });
 
-    if (res.status.error_code !== 0) {
-      console.error(`API Error: ${res.status.error_message}`);
-      return ExpoResponse.json({
-        error: `API Error: ${res.status.error_message}`,
-      });
-    }
-
-    return ExpoResponse.json(res.data);
+    return ExpoResponse.json(listCoins);
   } catch (error) {
     console.error(`Fetch Error: ${(error as Error).message}`);
     return ExpoResponse.json({
