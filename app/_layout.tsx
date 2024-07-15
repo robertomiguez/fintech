@@ -14,6 +14,7 @@ import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
 import { Text, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { UserInactivityProvider } from '@/context/UserInactivity';
 
 const queryClient = new QueryClient();
 
@@ -176,6 +177,10 @@ const InitialLayout = () => {
             ),
           }}
         />
+        <Stack.Screen
+          name="(authenticated)/(modals)/lock"
+          options={{ headerShown: false, animation: 'none' }}
+        />
       </Stack>
     </GestureHandlerRootView>
   );
@@ -188,7 +193,9 @@ const RootLayoutNav = () => {
       tokenCache={tokenCache}
     >
       <QueryClientProvider client={queryClient}>
-        <InitialLayout />
+        <UserInactivityProvider>
+          <InitialLayout />
+        </UserInactivityProvider>
       </QueryClientProvider>
     </ClerkProvider>
   );
