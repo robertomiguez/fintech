@@ -5,6 +5,10 @@ const storage = new MMKV({
   id: 'balance-storage',
 });
 
+const inactivityStorage = new MMKV({
+  id: 'inactivity-storage',
+});
+
 export const zustandStorage: StateStorage = {
   setItem: (name, value) => {
     return storage.set(name, value);
@@ -16,4 +20,13 @@ export const zustandStorage: StateStorage = {
   removeItem: (name) => {
     return storage.delete(name);
   },
+};
+
+export const recordStartTime = () => {
+  const startTime = Date.now();
+  inactivityStorage.set('startTime', startTime);
+};
+
+export const getStartTime = () => {
+  return inactivityStorage.getNumber('startTime') || 0;
 };
