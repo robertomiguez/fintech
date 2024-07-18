@@ -12,7 +12,7 @@ import {
 } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import * as SecureStore from 'expo-secure-store';
-import { Text, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { UserInactivityProvider } from '@/context/UserInactivity';
 
@@ -82,7 +82,11 @@ const InitialLayout = () => {
   }, [isLoaded, isSignedIn]);
 
   if (!loaded || !isLoaded) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
   }
 
   return (
