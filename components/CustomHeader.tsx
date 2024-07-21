@@ -4,6 +4,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import Colors from '@/constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 
 const CustomHeader = () => {
   const { top } = useSafeAreaInsets();
@@ -15,11 +16,13 @@ const CustomHeader = () => {
       style={{ paddingTop: top }}
     >
       <View style={styles.container}>
-        <TouchableOpacity style={styles.roundBtn}>
-          <Text style={{ color: '#fff', fontWeight: '500', fontSize: 16 }}>
-            RM
-          </Text>
-        </TouchableOpacity>
+        <Link href="/(authenticated)/(modals)/account" asChild>
+          <TouchableOpacity style={styles.roundBtn}>
+            <Text style={{ color: '#fff', fontWeight: '500', fontSize: 16 }}>
+              RM
+            </Text>
+          </TouchableOpacity>
+        </Link>
         <View style={styles.searchSection}>
           <Ionicons
             style={styles.searchIcon}
