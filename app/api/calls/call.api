@@ -9,3 +9,9 @@ GET http://localhost:8081/api/listings
 GET https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=gbp&days=7
 
 GET http://localhost:8081/api/tickers?coin=polkadot
+
+// countries
+
+GET https://restcountries.com/v3.1/all?fields=name
+
+GET http://localhost:8081/api/countries
