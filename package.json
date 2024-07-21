@@ -3,8 +3,11 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start": "expo start",
+    "start": "expo start -c",
+    "start:reset-cache": "expo start -- --reset-cache",
     "android": "expo run:android -d",
+    "prebuild": "expo prebuild --clean",
+    "cache:clean": "npm cache clean --force",
     "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
