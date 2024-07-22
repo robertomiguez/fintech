@@ -1,7 +1,21 @@
 import * as DropdownMenu from 'zeego/dropdown-menu';
 import RoundBtn from './RoundBtn';
+import { generatePDF } from '@/components/Statement';
+import { Alert } from 'react-native';
 
 const Dropdown = () => {
+  const handleSelect = async (itemKey: string) => {
+    switch (itemKey) {
+      case 'statement':
+        await generatePDF();
+        break;
+      default:
+        Alert.alert(
+          'Not Implemented',
+          `The "${itemKey}" feature has not been implemented yet.`
+        );
+    }
+  };
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
@@ -16,7 +30,10 @@ const Dropdown = () => {
         collisionPadding={10}
         sideOffset={5}
       >
-        <DropdownMenu.Item key="statement">
+        <DropdownMenu.Item
+          key="statement"
+          onSelect={() => handleSelect('statement')}
+        >
           <DropdownMenu.ItemTitle>Statement</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemIcon
             ios={{
@@ -26,7 +43,10 @@ const Dropdown = () => {
             androidIconName="sym_action_email"
           />
         </DropdownMenu.Item>
-        <DropdownMenu.Item key="converter">
+        <DropdownMenu.Item
+          key="converter"
+          onSelect={() => handleSelect('converter')}
+        >
           <DropdownMenu.ItemTitle>Converter</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemIcon
             ios={{
@@ -36,7 +56,10 @@ const Dropdown = () => {
             androidIconName="ic_popup_sync"
           />
         </DropdownMenu.Item>
-        <DropdownMenu.Item key="background">
+        <DropdownMenu.Item
+          key="background"
+          onSelect={() => handleSelect('background')}
+        >
           <DropdownMenu.ItemTitle>Background</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemIcon
             ios={{
@@ -46,7 +69,10 @@ const Dropdown = () => {
             androidIconName="ic_menu_report_image"
           />
         </DropdownMenu.Item>
-        <DropdownMenu.Item key="account">
+        <DropdownMenu.Item
+          key="account"
+          onSelect={() => handleSelect('account')}
+        >
           <DropdownMenu.ItemTitle>Account</DropdownMenu.ItemTitle>
           <DropdownMenu.ItemIcon
             ios={{
