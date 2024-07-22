@@ -1,5 +1,5 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+. "$(dirname "$0")/_/h"
 
 # Check for .test.js, .test.ts, and .test.tsx files
 if [ -n "$(git ls-files 'src/**/*.test.{js,ts,tsx}')" ]; then
