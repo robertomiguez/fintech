@@ -5,9 +5,15 @@ import Colors from '@/constants/Colors';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
+import { useUser } from '@clerk/clerk-expo';
+import { useState } from 'react';
 
 const CustomHeader = () => {
   const { top } = useSafeAreaInsets();
+  const { user } = useUser();
+  const initials =
+    (user?.firstName?.[0]?.toUpperCase() || '') +
+    (user?.lastName?.[0]?.toUpperCase() || '');
 
   return (
     <BlurView
@@ -19,7 +25,7 @@ const CustomHeader = () => {
         <Link href="/(authenticated)/(modals)/account" asChild>
           <TouchableOpacity style={styles.roundBtn}>
             <Text style={{ color: '#fff', fontWeight: '500', fontSize: 16 }}>
-              RM
+              {initials}
             </Text>
           </TouchableOpacity>
         </Link>
