@@ -12,6 +12,12 @@ GET http://localhost:8081/api/tickers?coin=polkadot
 
 // countries
 
-GET https://restcountries.com/v3.1/all?fields=name
+GET https://restcountries.com/v3.1/all?fields=name,idd,flags,cca2,cca3,currencies
+GET https://restcountries.com/v3.1/all
 
-GET http://localhost:8081/api/countries
+GET http://localhost:8082/api/countries/all
+GET http://localhost:8082/api/countries/pt
+
+
+
+

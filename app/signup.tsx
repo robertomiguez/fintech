@@ -9,14 +9,12 @@ import { View, Text, StyleSheet, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Page = () => {
-  const [countryCode, setCountryCode] = useState('+44');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [fullPhoneNumber, setFullPhoneNumber] = useState<string>('');
   const [validation, setValidation] = useState(false);
 
   const router = useRouter();
   const { signUp } = useSignUp();
   const onSignUp = async () => {
-    const fullPhoneNumber = `${countryCode}${phoneNumber}`;
     try {
       await signUp!.create({
         phoneNumber: fullPhoneNumber,
@@ -43,10 +41,8 @@ const Page = () => {
       <PhoneNumberInput
         header="Let's get started"
         description="Enter your phone number. We will send you a confirmation code there."
-        countryCode={countryCode}
-        setCountryCode={setCountryCode}
-        phoneNumber={phoneNumber}
-        setPhoneNumber={setPhoneNumber}
+        fullPhoneNumber={fullPhoneNumber}
+        setFullPhoneNumber={setFullPhoneNumber}
         setValidation={setValidation}
       />
 

@@ -18,6 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import EditUserInfo from '@/components/EditUserInfo';
 import ActionButton from '@/components/ActionButton';
 import { validateRequiredFields } from '@/utils/ValidationUtils';
+import { Country } from '@/types/Country';
 
 const Page = () => {
   const { user } = useUser();
@@ -25,7 +26,11 @@ const Page = () => {
   const [firstName, setFirstName] = useState(user?.firstName);
   const [lastName, setLastName] = useState(user?.lastName);
   const [birthday, setBirthday] = useState(user?.unsafeMetadata?.birthday);
-  const [country, setCountry] = useState(user?.unsafeMetadata?.country);
+  const [country, setCountry] = useState<Country | null>(() => {
+    const flag = user?.unsafeMetadata?.flag;
+    const name = user?.unsafeMetadata?.name;
+    return flag && name ? { flagUrl: String(flag), name: String(name) } : null;
+  });
   const [edit, setEdit] = useState(false);
 
   const navigation = useNavigation();
@@ -37,7 +42,8 @@ const Page = () => {
         lastName: (lastName as string) || undefined,
         unsafeMetadata: {
           birthday: (birthday as string) || undefined,
-          country: (country as string) || undefined,
+          name: (country as Country)?.name || undefined,
+          flag: (country as Country)?.flagUrl || undefined,
         },
       };
 
@@ -110,7 +116,7 @@ const Page = () => {
                 firstName={firstName as string}
                 lastName={lastName as string}
                 birthday={birthday as string}
-                country={country as string}
+                country={country as Country}
                 setFirstName={setFirstName}
                 setLastName={setLastName}
                 setBirthday={setBirthday}

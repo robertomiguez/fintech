@@ -8,8 +8,7 @@ import { useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 
 const Page = () => {
-  const [countryCode, setCountryCode] = useState('+44');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [fullPhoneNumber, setFullPhoneNumber] = useState<string>('');
   const [validation, setValidation] = useState(false);
 
   const router = useRouter();
@@ -17,7 +16,6 @@ const Page = () => {
   const onSignIn = async (type: SignIn) => {
     if (type === SignIn.Phone) {
       try {
-        const fullPhoneNumber = `${countryCode}${phoneNumber}`;
         const { supportedFirstFactors } = await signIn!.create({
           identifier: fullPhoneNumber,
         });
@@ -50,21 +48,21 @@ const Page = () => {
   };
   return (
     <AuthPageLayout>
-      <PhoneNumberInput
-        header="Let's get started"
-        description="Enter your phone number. We will send you a confirmation code there."
-        countryCode={countryCode}
-        setCountryCode={setCountryCode}
-        phoneNumber={phoneNumber}
-        setPhoneNumber={setPhoneNumber}
-        setValidation={setValidation}
-      />
-      <PillButton
-        title="Continue"
-        onPress={() => onSignIn(SignIn.Phone)}
-        disabled={!validation}
-        style={{ marginBottom: 20, width: 250 }}
-      />
+      <>
+        <PhoneNumberInput
+          header="Let's get started"
+          description="Enter your phone number. We will send you a confirmation code there."
+          fullPhoneNumber={fullPhoneNumber}
+          setFullPhoneNumber={setFullPhoneNumber}
+          setValidation={setValidation}
+        />
+        <PillButton
+          title="Continue"
+          onPress={() => onSignIn(SignIn.Phone)}
+          disabled={!validation}
+          style={{ marginBottom: 20, width: 250 }}
+        />
+      </>
     </AuthPageLayout>
   );
 };
