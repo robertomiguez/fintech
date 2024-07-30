@@ -4,7 +4,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Text,
-  Platform,
 } from 'react-native';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,22 +15,23 @@ import { format } from 'date-fns';
 import { useQuery } from '@tanstack/react-query';
 import ErrorMessage from '@/components/ErrorMessage';
 import Loading from '@/components/Loading';
-import { Picker } from '@react-native-picker/picker';
+import type { Country } from '@/types/Country';
+import CountryPickerModal from '@/components/CountryPickerModal';
 
 interface EditUserInfoProps {
   firstName: string;
   lastName: string;
   birthday: string;
-  country: string;
+  country: Country | null;
   setFirstName: (text: string) => void;
   setLastName: (text: string) => void;
   setBirthday: (text: string) => void;
-  setCountry: (text: string) => void;
+  setCountry: (text: Country | null) => void;
   onSaveUser: () => void;
 }
 
 const fetchCountries = async () => {
-  const response = await fetch('/api/countries');
+  const response = await fetch('/api/countries/all');
   if (!response.ok) throw new Error('Failed to fetch countries');
   return await response.json();
 };
@@ -40,7 +40,7 @@ const EditUserInfo = ({
   firstName = '',
   lastName = '',
   birthday = '',
-  country = '',
+  country = null,
   setFirstName,
   setLastName,
   setBirthday,
@@ -66,48 +66,47 @@ const EditUserInfo = ({
     <View style={styles.editRow}>
       <Loading show={isCountriesLoading} />
       <ErrorMessage show={countriesError} />
-      <View style={styles.row}>
-        <TextInput
-          placeholder="First Name"
-          value={firstName}
-          onChangeText={setFirstName}
-          style={styles.inputField}
-        />
-        <TextInput
-          placeholder="Last Name"
-          value={lastName}
-          onChangeText={setLastName}
-          style={styles.inputField}
-        />
-      </View>
-      <View style={styles.row}>
-        <TouchableOpacity
-          onPress={() => setDatePickerVisibility(true)}
-          style={styles.inputField}
-        >
-          <Text style={birthday ? {} : { color: Colors.gray }}>
-            {birthday || 'dd/mm/yyyy'}
-          </Text>
-        </TouchableOpacity>
-        <Picker
-          selectedValue={country}
-          onValueChange={(itemValue) => setCountry(itemValue)}
-          style={styles.inputField}
-        >
-          <Picker.Item label="Select Country" value="" />
-          {countries?.map((country: { name: string }, index: number) => (
-            <Picker.Item
-              key={index}
-              label={country.name}
-              value={country.name}
+      {!isCountriesLoading && (
+        <>
+          <View style={styles.row}>
+            <TextInput
+              placeholder="First Name"
+              value={firstName}
+              onChangeText={setFirstName}
+              style={styles.inputField}
             />
-          ))}
-        </Picker>
-      </View>
-      <TouchableOpacity onPress={onSaveUser} style={styles.saveButton}>
-        <Text>Save</Text>
-        <Ionicons name="checkmark-outline" size={30} color={Colors.blue} />
-      </TouchableOpacity>
+            <TextInput
+              placeholder="Last Name"
+              value={lastName}
+              onChangeText={setLastName}
+              style={styles.inputField}
+            />
+          </View>
+
+          <View style={styles.row}>
+            <TouchableOpacity
+              onPress={() => setDatePickerVisibility(true)}
+              style={styles.inputField}
+            >
+              <Text style={birthday ? {} : { color: Colors.gray }}>
+                {birthday || 'dd/mm/yyyy'}
+              </Text>
+            </TouchableOpacity>
+            {countries && (
+              <CountryPickerModal
+                countries={countries}
+                selectedCountry={country}
+                onSelectCountry={setCountry}
+                displayProperty="name"
+              />
+            )}
+          </View>
+          <TouchableOpacity onPress={onSaveUser} style={styles.saveButton}>
+            <Text>Save</Text>
+            <Ionicons name="checkmark-outline" size={30} color={Colors.blue} />
+          </TouchableOpacity>
+        </>
+      )}
 
       {isDatePickerVisible && (
         <DateTimePicker
@@ -140,8 +139,8 @@ const styles = StyleSheet.create({
     width: 140,
     height: 44,
     borderWidth: 1,
-    borderColor: Colors.gray,
-    borderRadius: 8,
+    borderColor: Colors.lightGray,
+    borderRadius: 16,
     padding: 10,
     backgroundColor: '#fff',
     justifyContent: 'center',

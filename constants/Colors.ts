@@ -7,4 +7,5 @@ export default {
   lightGray: '#D8DCE2',
   red: '#FF0000',
   blue: '#0000FF',
+  lightBlue: '607cc9',
 };
