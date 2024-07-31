@@ -37,7 +37,7 @@ const Page = () => {
         </View>
         <View style={styles.buttons}>
           <Link
-            href={'/login'}
+            href={'/authpage?type=login'}
             style={[
               defaultStyles.pillButton,
               { flex: 1, backgroundColor: Colors.dark },
@@ -51,7 +51,7 @@ const Page = () => {
             </TouchableOpacity>
           </Link>
           <Link
-            href={'/signup'}
+            href={'/authpage?type=signup'}
             style={[
               defaultStyles.pillButton,
               { flex: 1, backgroundColor: 'white' },
