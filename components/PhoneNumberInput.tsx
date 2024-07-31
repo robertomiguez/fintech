@@ -65,6 +65,8 @@ const PhoneNumberInput = ({
     if (validationResult) {
       setFullPhoneNumber(`${country?.phoneCode}${phoneNumber}`);
       setValidation(true);
+    } else {
+      setValidation(false);
     }
   }, [
     country?.phoneCode,

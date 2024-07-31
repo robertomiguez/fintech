@@ -4,10 +4,9 @@ import {
   useSignIn,
   useSignUp,
 } from '@clerk/clerk-expo';
-import { Link, useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { Fragment, useEffect, useState } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Alert, StyleSheet, Text, View } from 'react-native';
 import {
   CodeField,
   Cursor,
@@ -15,6 +14,7 @@ import {
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
 import Colors from '@/constants/Colors';
+import AlreadyHaveAccount from '@/components/AlreadyHaveAccount';
 
 const CELL_COUNT = 6;
 
@@ -51,7 +51,7 @@ const Page = () => {
     } catch (error) {
       console.error('error', JSON.stringify(error, null, 2));
       if (isClerkAPIResponseError(error)) {
-        console.error('error', error.errors[0].message);
+        Alert.alert(error.errors[0].longMessage!);
       }
     }
   };
@@ -62,7 +62,7 @@ const Page = () => {
     } catch (error) {
       console.error('error', JSON.stringify(error, null, 2));
       if (isClerkAPIResponseError(error)) {
-        console.error('error', error.errors[0].message);
+        Alert.alert(error.errors[0].longMessage!);
       }
     }
   };
@@ -101,14 +101,7 @@ const Page = () => {
           </Fragment>
         )}
       />
-
-      <Link href={'/login'} replace asChild>
-        <TouchableOpacity>
-          <Text style={[defaultStyles.textLink]}>
-            Already have an account? Log in.
-          </Text>
-        </TouchableOpacity>
-      </Link>
+      <AlreadyHaveAccount />
     </View>
   );
 };
@@ -121,7 +114,7 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   cellRoot: {
-    width: 45,
+    width: 40,
     height: 60,
     justifyContent: 'center',
     alignItems: 'center',

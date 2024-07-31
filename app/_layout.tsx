@@ -94,24 +94,11 @@ const InitialLayout = () => {
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: false }} />
         <Stack.Screen
-          name="signup"
+          name="authpage"
           options={{
             title: '',
             headerBackTitle: '',
-            headerShadowVisible: false,
-            headerStyle: { backgroundColor: Colors.background },
-            headerLeft: () => (
-              <TouchableOpacity onPress={router.back}>
-                <Ionicons name="arrow-back" size={30} color={Colors.dark} />
-              </TouchableOpacity>
-            ),
-          }}
-        />
-        <Stack.Screen
-          name="login"
-          options={{
-            title: '',
-            headerBackTitle: '',
+            headerShown: true,
             headerShadowVisible: false,
             headerStyle: { backgroundColor: Colors.background },
             headerLeft: () => (
