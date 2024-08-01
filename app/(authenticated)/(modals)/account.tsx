@@ -2,7 +2,7 @@ import Colors from '@/constants/Colors';
 import { useAuth, useUser } from '@clerk/clerk-expo';
 import { Ionicons } from '@expo/vector-icons';
 import { BlurView } from 'expo-blur';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   Platform,
   StyleSheet,
@@ -13,12 +13,18 @@ import {
   Alert,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { router, useRouter } from 'expo-router';
+import { router } from 'expo-router';
 import { useNavigation } from '@react-navigation/native';
 import EditUserInfo from '@/components/EditUserInfo';
 import ActionButton from '@/components/ActionButton';
 import { validateRequiredFields } from '@/utils/ValidationUtils';
 import { Country } from '@/types/Country';
+
+interface User {
+  unsafeMetadata?: {
+    country?: Country;
+  };
+}
 
 const Page = () => {
   const { user } = useUser();
@@ -27,10 +33,11 @@ const Page = () => {
   const [lastName, setLastName] = useState(user?.lastName);
   const [birthday, setBirthday] = useState(user?.unsafeMetadata?.birthday);
   const [country, setCountry] = useState<Country | null>(() => {
-    const flag = user?.unsafeMetadata?.flag;
-    const name = user?.unsafeMetadata?.name;
-    return flag && name ? { flagUrl: String(flag), name: String(name) } : null;
+    const flag = (user as User | null)?.unsafeMetadata?.country?.flag;
+    const name = (user as User | null)?.unsafeMetadata?.country?.name;
+    return flag && name ? { flag, name } : null;
   });
+
   const [edit, setEdit] = useState(false);
 
   const navigation = useNavigation();
@@ -42,8 +49,10 @@ const Page = () => {
         lastName: (lastName as string) || undefined,
         unsafeMetadata: {
           birthday: (birthday as string) || undefined,
-          name: (country as Country)?.name || undefined,
-          flag: (country as Country)?.flagUrl || undefined,
+          country: {
+            name: (country as Country)?.name || undefined,
+            flag: (country as Country)?.flag || undefined,
+          },
         },
       };
 

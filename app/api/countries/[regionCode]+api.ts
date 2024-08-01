@@ -28,7 +28,7 @@ export async function GET(
         cca2?: string;
       }) => {
         return {
-          flagUrl: country.flags.png,
+          flag: country.flags.png,
           name: country.name.common,
           phoneCode:
             country?.idd?.root + (country?.idd?.suffixes?.[0] || '') || '',
