@@ -62,7 +62,7 @@ const CountryPickerModal = ({
         {selectedCountry ? (
           <View style={styles.countryItem}>
             <Image
-              source={{ uri: selectedCountry?.flagUrl }}
+              source={{ uri: selectedCountry?.flag }}
               style={styles.buttonCountry}
               cachePolicy="memory-disk"
             />
@@ -92,7 +92,7 @@ const CountryPickerModal = ({
                   ]}
                 >
                   <Image
-                    source={{ uri: item.flagUrl }}
+                    source={{ uri: item.flag }}
                     style={styles.country}
                     cachePolicy="memory-disk"
                   />
