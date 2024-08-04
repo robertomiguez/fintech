@@ -2,7 +2,7 @@
   "expo": {
     "name": "fintech",
     "slug": "fintech",
-    "version": "1.0.0",
+    "version": "2.0.3",
     "orientation": "portrait",
     "icon": "./assets/images/dollars-icon.png",
     "scheme": "myapp",
@@ -13,14 +13,21 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.none.fintech"
     },
     "android": {
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/dollars-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.anonymous.fintech"
+      "package": "com.none.fintech",
+      "permissions": [
+        "android.permission.USE_BIOMETRIC",
+        "android.permission.USE_FINGERPRINT",
+        "android.permission.CAMERA"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -46,6 +53,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "01c2991b-7656-4302-8927-2ec996a9799b"
+      }
     }
   }
 }
