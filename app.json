@@ -2,7 +2,7 @@
   "expo": {
     "name": "fintech",
     "slug": "fintech",
-    "version": "2.0.3",
+    "version": "2.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/dollars-icon.png",
     "scheme": "myapp",
@@ -17,7 +17,7 @@
       "bundleIdentifier": "com.none.fintech"
     },
     "android": {
-      "versionCode": 3,
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/dollars-icon.png",
         "backgroundColor": "#ffffff"
