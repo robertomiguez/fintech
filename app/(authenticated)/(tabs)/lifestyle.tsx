@@ -1,8 +1,15 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { defaultStyles } from '@/constants/Styles';
+import { useHeaderHeight } from '@react-navigation/elements';
+
 const Page = () => {
+  const headerHeight = useHeaderHeight();
   return (
-    <View>
-      <Text style={styles.container}>Page</Text>
+    <View style={{ paddingTop: headerHeight }}>
+      <Text style={defaultStyles.sectionHeader}>Not Implemented</Text>
+      <Text style={defaultStyles.sectionHeader}>
+        The Life style feature has not been implemented yet.
+      </Text>
     </View>
   );
 };

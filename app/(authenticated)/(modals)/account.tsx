@@ -19,6 +19,7 @@ import EditUserInfo from '@/components/EditUserInfo';
 import ActionButton from '@/components/ActionButton';
 import { validateRequiredFields } from '@/utils/ValidationUtils';
 import { Country } from '@/types/Country';
+import { showNotImplementedAlert } from '@/utils/alertUtils';
 
 interface User {
   unsafeMetadata?: {
@@ -147,12 +148,25 @@ const Page = () => {
         <ActionButton
           iconName="person"
           text="Account"
+          onPress={() => {
+            showNotImplementedAlert('Account');
+          }}
           textColor={Colors.gray}
         />
-        <ActionButton iconName="bulb" text="Learn" textColor={Colors.gray} />
+        <ActionButton
+          iconName="bulb"
+          text="Learn"
+          onPress={() => {
+            showNotImplementedAlert('Learn');
+          }}
+          textColor={Colors.gray}
+        />
         <ActionButton
           iconName="megaphone"
           text="Inbox"
+          onPress={() => {
+            showNotImplementedAlert('Inbox');
+          }}
           textColor={Colors.gray}
           notificationCount={0}
         />

@@ -2,7 +2,7 @@ import type { Coin } from '@/types/crypto';
 import { useCoinStore } from '@/store/coinStore';
 import { useQuery } from '@tanstack/react-query';
 import { Link } from 'expo-router';
-import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Image } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
 import { ScrollView } from 'react-native-gesture-handler';

@@ -1,7 +1,7 @@
 import * as DropdownMenu from 'zeego/dropdown-menu';
 import RoundBtn from './RoundBtn';
 import { generatePDF } from '@/components/Statement';
-import { Alert } from 'react-native';
+import { showNotImplementedAlert } from '@/utils/alertUtils';
 
 const Dropdown = () => {
   const handleSelect = async (itemKey: string) => {
@@ -10,10 +10,7 @@ const Dropdown = () => {
         await generatePDF();
         break;
       default:
-        Alert.alert(
-          'Not Implemented',
-          `The "${itemKey}" feature has not been implemented yet.`
-        );
+        showNotImplementedAlert(itemKey);
     }
   };
   return (
