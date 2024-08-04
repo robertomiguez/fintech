@@ -1,10 +1,11 @@
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
 
 import { SIZE } from './Config';
 import Colors from '@/constants/Colors';
 import { useBalanceStore } from '@/store/balanceStore';
 import { Ionicons } from '@expo/vector-icons';
+import { showNotImplementedAlert } from '@/utils/alertUtils';
 
 const styles = StyleSheet.create({
   container: {
@@ -31,7 +32,12 @@ const Tile = ({ id }: TileProps) => {
 
   if (id === 'spent') {
     return (
-      <View style={styles.container} pointerEvents="none">
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => {
+          showNotImplementedAlert('Spent this month', 'Drag to reorder');
+        }}
+      >
         <Text style={{ color: Colors.gray, fontWeight: '500', fontSize: 16 }}>
           Spent this month
         </Text>
@@ -45,18 +51,18 @@ const Tile = ({ id }: TileProps) => {
         >
           1024€
         </Text>
-      </View>
+      </TouchableOpacity>
     );
   }
 
   if (id === 'cashback') {
     return (
-      <View
+      <TouchableOpacity
         style={[
           styles.container,
           { alignItems: 'center', justifyContent: 'center' },
         ]}
-        pointerEvents="none"
+        onPress={() => showNotImplementedAlert('Cashback', 'Drag to reorder')}
       >
         <View
           style={{ alignItems: 'center', justifyContent: 'center', gap: 10 }}
@@ -81,13 +87,18 @@ const Tile = ({ id }: TileProps) => {
             Cashback
           </Text>
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
   if (id === 'recent') {
     return (
-      <View style={styles.container} pointerEvents="none">
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() =>
+          showNotImplementedAlert('Recent transaction', 'Drag to reorder')
+        }
+      >
         <View>
           <Text style={{ color: Colors.gray, fontWeight: '500', fontSize: 16 }}>
             Recent transaction
@@ -126,13 +137,16 @@ const Tile = ({ id }: TileProps) => {
             </>
           )}
         </View>
-      </View>
+      </TouchableOpacity>
     );
   }
 
   if (id === 'cards') {
     return (
-      <View style={styles.container} pointerEvents="none">
+      <TouchableOpacity
+        style={styles.container}
+        onPress={() => showNotImplementedAlert('Cards', 'Drag to reorder')}
+      >
         <Text style={{ color: Colors.gray, fontWeight: '500', fontSize: 16 }}>
           Cards
         </Text>
@@ -142,7 +156,7 @@ const Tile = ({ id }: TileProps) => {
           color={Colors.primaryMuted}
           style={{ marginTop: 20, alignSelf: 'center' }}
         />
-      </View>
+      </TouchableOpacity>
     );
   }
 };

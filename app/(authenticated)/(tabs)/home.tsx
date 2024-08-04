@@ -7,6 +7,7 @@ import { useBalanceStore } from '@/store/balanceStore';
 import { Ionicons } from '@expo/vector-icons';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useHeaderHeight } from '@react-navigation/elements';
+import { showNotImplementedAlert } from '@/utils/alertUtils';
 
 const Page = () => {
   const { balance, runTransaction, transactions, clearTransactions } =
@@ -43,7 +44,13 @@ const Page = () => {
           text={'Exchange'}
           onPress={clearTransactions}
         />
-        <RoundBtn icon={'list'} text={'Details'} />
+        <RoundBtn
+          icon={'list'}
+          text={'Details'}
+          onPress={() => {
+            showNotImplementedAlert('Details');
+          }}
+        />
         <Dropdown />
       </View>
 

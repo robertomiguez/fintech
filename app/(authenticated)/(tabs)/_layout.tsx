@@ -40,12 +40,25 @@ const _layout = () => {
         }}
       />
       <Tabs.Screen
+        name="crypto"
+        options={{
+          title: 'Crypto',
+          tabBarIcon: ({ size, color }) => (
+            <FontAwesome name="bitcoin" size={size} color={color} />
+          ),
+          header: () => <CustomHeader />,
+          headerTransparent: true,
+        }}
+      />
+      <Tabs.Screen
         name="invest"
         options={{
           title: 'Invest',
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="line-chart" size={size} color={color} />
           ),
+          header: () => <CustomHeader />,
+          headerTransparent: true,
         }}
       />
       <Tabs.Screen
@@ -54,15 +67,6 @@ const _layout = () => {
           title: 'Transfer',
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="registered" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="crypto"
-        options={{
-          title: 'Crypto',
-          tabBarIcon: ({ size, color }) => (
-            <FontAwesome name="bitcoin" size={size} color={color} />
           ),
           header: () => <CustomHeader />,
           headerTransparent: true,
@@ -75,6 +79,8 @@ const _layout = () => {
           tabBarIcon: ({ size, color }) => (
             <FontAwesome name="th" size={size} color={color} />
           ),
+          header: () => <CustomHeader />,
+          headerTransparent: true,
         }}
       />
     </Tabs>

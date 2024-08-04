@@ -6,7 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Link } from 'expo-router';
 import { useUser } from '@clerk/clerk-expo';
-import { useState } from 'react';
+import { showNotImplementedAlert } from '@/utils/alertUtils';
 
 const CustomHeader = () => {
   const { top } = useSafeAreaInsets();
@@ -40,14 +40,21 @@ const CustomHeader = () => {
             style={styles.input}
             placeholder="Search"
             placeholderTextColor={Colors.dark}
+            onSubmitEditing={() => showNotImplementedAlert('Search')}
           />
         </View>
-        <View style={styles.circle}>
+        <TouchableOpacity
+          style={styles.circle}
+          onPress={() => showNotImplementedAlert('Chart')}
+        >
           <Ionicons name="stats-chart" size={20} color={Colors.dark} />
-        </View>
-        <View style={styles.circle}>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.circle}
+          onPress={() => showNotImplementedAlert('Cards')}
+        >
           <Ionicons name="card" size={20} color={Colors.dark} />
-        </View>
+        </TouchableOpacity>
       </View>
     </BlurView>
   );
