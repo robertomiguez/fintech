@@ -17,6 +17,7 @@ import ErrorMessage from '@/components/ErrorMessage';
 import Loading from '@/components/Loading';
 import type { Country } from '@/types/Country';
 import CountryPickerModal from '@/components/CountryPickerModal';
+import CountryService from '@/services/CountryService';
 
 interface EditUserInfoProps {
   firstName: string;
@@ -31,9 +32,7 @@ interface EditUserInfoProps {
 }
 
 const fetchCountries = async () => {
-  const response = await fetch('/api/countries/all');
-  if (!response.ok) throw new Error('Failed to fetch countries');
-  return await response.json();
+  return await CountryService.getCountries();
 };
 
 const EditUserInfo = ({

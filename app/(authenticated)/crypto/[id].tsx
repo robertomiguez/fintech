@@ -23,15 +23,10 @@ import Loading from '@/components/Loading';
 import { useCoinStore } from '@/store/coinStore';
 import { format } from 'date-fns';
 import CurrencyChangeIndicator from '@/components/CurrencyChangeIndicator';
+import TickerService from '@/services/TickerService';
 
-const fetchTickers = async (id: string): Promise<Ticker[]> => {
-  const response = await fetch(`/api/tickers?coin=${id}`);
-
-  if (!response.ok) throw new Error('Failed to fetch tickers');
-
-  const tickers = await response.json();
-
-  return tickers;
+const fetchTickers = async (id: string) => {
+  return await TickerService.getTickers(id);
 };
 
 const Page = () => {

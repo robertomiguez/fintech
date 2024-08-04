@@ -11,11 +11,10 @@ import { defaultStyles } from '@/constants/Styles';
 import CurrencyChangeIndicator from '@/components/CurrencyChangeIndicator';
 import ErrorMessage from '@/components/ErrorMessage';
 import Loading from '@/components/Loading';
+import CryptoService from '@/services/CryptoService';
 
 const fetchCoins = async () => {
-  const response = await fetch('/api/listings');
-  if (!response.ok) throw new Error('Failed to fetch coins');
-  return await response.json();
+  return await CryptoService.getCoins();
 };
 
 const Page = () => {

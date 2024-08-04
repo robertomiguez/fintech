@@ -9,6 +9,7 @@ import { Country } from '@/types/Country';
 import ErrorMessage from '@/components/ErrorMessage';
 import Loading from '@/components/Loading';
 import { getRegionCode } from '@/utils/CountryUtils';
+import CountryService from '@/services/CountryService';
 
 interface PhoneNumberInputProps {
   header: string;
@@ -19,14 +20,7 @@ interface PhoneNumberInputProps {
 }
 
 const fetchCountries = async () => {
-  try {
-    const response = await fetch('/api/countries/all');
-    if (!response.ok) throw new Error('Failed to fetch countries');
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error('Error:', error);
-  }
+  return await CountryService.getCountries();
 };
 
 const PhoneNumberInput = ({
