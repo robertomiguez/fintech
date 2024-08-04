@@ -37,7 +37,13 @@ const tokenCache = {
   },
 };
 
-const CLERK_PUBLISHABLE_KEY = process.env.CLERK_PUBLISHABLE_KEY;
+const CLERK_PUBLISHABLE_KEY = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+if (!CLERK_PUBLISHABLE_KEY) {
+  throw new Error(
+    'Missing Publishable Key. Please set EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY'
+  );
+}
 
 export {
   // Catch any errors thrown by the Layout component.
