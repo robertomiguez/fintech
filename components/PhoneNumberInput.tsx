@@ -78,7 +78,7 @@ const PhoneNumberInput = ({
   return (
     <>
       <Loading show={isCountriesLoading} />
-      <ErrorMessage show={countriesError} />
+      <ErrorMessage show={countriesError} message="countriesError" />
       <Text style={defaultStyles.header}>{header}</Text>
       <Text style={defaultStyles.descriptionText}>{description}</Text>
       <View style={styles.inputContainer}>
