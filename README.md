@@ -11,7 +11,8 @@ This is a React Native FinTech clone using Clerk for user authentication with OT
 - [Zustand](https://zustand-demo.pmnd.rs/) and [MMKV](https://github.com/mrousavy/react-native-mmkv) for state management
 - [Victory Native XL](https://commerce.nearform.com/open-source/victory-native) for charts
 - [Zeego](https://zeego.dev/start) for native menus
-- [CoinMarketCap API](https://coinmarketcap.com/api/documentation/v1/) for crypto prices
+- [Coingecko API](https://www.coingecko.com/en/api) for crypto prices
+- [REST Countries API](https://restcountries.com/) for countries
 
 ## Screenshots
 
