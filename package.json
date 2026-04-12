@@ -20,7 +20,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@clerk/clerk-expo": "^1.2.2",
+    "@clerk/clerk-expo": "^2.19.31",
     "@expo/vector-icons": "^14.0.0",
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-menu/menu": "^1.1.2",
